@@ -55,10 +55,12 @@ class TipViewModel: ViewModel() {
 
     fun setTipPercent(value: Int?) {
         _tipPercent.value = value
+        _customTipAmount.value = ""
     }
 
     fun setCustomTipAmount(value: String) {
         _customTipAmount.value = value
+        _tipPercent.value = null
     }
 
     fun reset() {

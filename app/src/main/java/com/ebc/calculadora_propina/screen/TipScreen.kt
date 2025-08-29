@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.ebc.calculadora_propina.R
 import com.ebc.calculadora_propina.components.TipPercentageSelector
 import com.ebc.calculadora_propina.viewModel.TipViewModel
 
@@ -42,6 +48,10 @@ fun TipScreen(
             )
 
     val tipOptions = listOf(5, 10, 15, 20)
+
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.bill)
+    )
 
     Column(
         modifier = Modifier.padding(15.dp)
@@ -64,7 +74,7 @@ fun TipScreen(
         Text(text = "Selecciona un porcentaje de propina")
         TipPercentageSelector(
             options = tipOptions,
-            selected = null,
+            selected = tipPercent,
             onSelected = viewModel::setTipPercent,
             enabled = isBillValid
         )
@@ -106,6 +116,20 @@ fun TipScreen(
             ) {
                 Text(text = "Pagar")
             }
+        }
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            LottieAnimation(
+                composition = composition,
+                iterations = LottieConstants.IterateForever,
+                modifier = Modifier
+                    .width(300.dp)
+            )
         }
 
 
