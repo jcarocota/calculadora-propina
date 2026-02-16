@@ -59,4 +59,13 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("com.airbnb.android:lottie-compose:6.0.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    // Para manejar respuesta como String (texto plano)
+    implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
+    // ViewModel + Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    //Iconos varios
+    implementation("androidx.compose.material:material-icons-extended")
 }

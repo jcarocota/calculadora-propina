@@ -8,11 +8,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ebc.calculadora_propina.screen.ThankyouScreen
 import com.ebc.calculadora_propina.screen.TipScreen
 import com.ebc.calculadora_propina.viewModel.TipViewModel
 
 @Composable
-fun AppNavigation(modifier: Modifier = Modifier) {
+    fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val viewModel: TipViewModel = viewModel()
 
@@ -21,7 +22,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             TipScreen(navController = navController, viewModel = viewModel)
         }
         composable(route = "thankyou") {
-            Text(text = "Fin!!!")
+            ThankyouScreen(navController = navController, viewModel = viewModel)
         }
     }
 }

@@ -2,11 +2,13 @@ package com.ebc.calculadora_propina.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ebc.calculadora_propina.network.Network
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -19,6 +21,10 @@ class TipViewModel: ViewModel() {
 
     private val _customTipAmount = MutableStateFlow("")
     val customTipAmount: StateFlow<String> = _customTipAmount
+
+    private val _loadinRandomTip = MutableStateFlow(false)
+    val loadingRandomTip: StateFlow<Boolean> = _loadinRandomTip
+
 
     val totalToPay: StateFlow<String> = combine(
         _billAmount,
@@ -35,7 +41,7 @@ class TipViewModel: ViewModel() {
             customTipAmount >0) {
             customTipAmount
         } else {
-            billAmount * ((tipPercent ?: 0) / 100)
+            billAmount * ((tipPercent ?: 0) / 100.0)
         }
 
         val formatted = NumberFormat.getNumberInstance(Locale.US).apply {
@@ -67,5 +73,29 @@ class TipViewModel: ViewModel() {
         _billAmount.value = ""
         _tipPercent.value = null
         _customTipAmount.value = ""
+    }
+
+    fun randomTip() {
+        _loadinRandomTip.value = true
+
+        val cantidad = _billAmount.value.toDoubleOrNull()
+        if (cantidad != null && cantidad > 0) {
+            viewModelScope.launch {
+                try {
+                    val response = Network.propinasApi.propinaRandom(cantidad)
+                    if (response.isSuccessful) {
+                        val body = response.body()?.trim()
+                        val propina = body?.toDoubleOrNull()
+                        if (propina != null) {
+                            setCustomTipAmount(propina.toString())
+                        }
+
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        _loadinRandomTip.value = false
     }
 }

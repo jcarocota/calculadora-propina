@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,6 +67,15 @@ fun ThankyouScreen(
             iterations = LottieConstants.IterateForever,
             modifier = Modifier.size(400.dp)
         )
+
+        Button(
+            onClick = {
+                viewModel.reset()
+                navController.navigate("main")
+            }
+        ) {
+            Text(text = "Iniciar nuevamente")
+        }
     }
 
 

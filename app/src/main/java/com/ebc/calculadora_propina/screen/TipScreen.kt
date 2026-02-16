@@ -7,15 +7,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +33,8 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ebc.calculadora_propina.R
 import com.ebc.calculadora_propina.components.TipPercentageSelector
+import com.ebc.calculadora_propina.ui.theme.Green40
+import com.ebc.calculadora_propina.ui.theme.Green80
 import com.ebc.calculadora_propina.viewModel.TipViewModel
 
 @Preview(showBackground = true)
@@ -41,6 +47,8 @@ fun TipScreen(
     val tipPercent by viewModel.tipPercent.collectAsState()
     val customTipAmount by viewModel.customTipAmount.collectAsState()
     val total by viewModel.totalToPay.collectAsState()
+    val loadingRandomTip by viewModel.loadingRandomTip.collectAsState()
+
 
     val isBillValid = (
             billAmount.toDoubleOrNull() != null &&
@@ -54,7 +62,9 @@ fun TipScreen(
     )
 
     Column(
-        modifier = Modifier.padding(15.dp)
+        modifier = Modifier
+            .padding(top = 40.dp)
+            .padding(horizontal = 15.dp)
     ) {
         Text(text = "Total de la cuenta")
         TextField(
@@ -81,7 +91,31 @@ fun TipScreen(
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Text(text = "¿Propina personalizada?")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "¿Propina personalizada?")
+            Button(
+                onClick = viewModel::randomTip,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Green40
+                ),
+                enabled = isBillValid && !loadingRandomTip,
+
+            ) {
+                if (loadingRandomTip) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(18.dp),
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(Modifier.width(10.dp))
+                }
+                Text(if (loadingRandomTip) "Consultando..." else "Random!!")
+            }
+        }
+
         TextField(
             value = customTipAmount,
             onValueChange = viewModel::setCustomTipAmount,
