@@ -68,4 +68,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     //Iconos varios
     implementation("androidx.compose.material:material-icons-extended")
+    //Json
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }
